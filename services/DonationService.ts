@@ -14,9 +14,9 @@ export function computeNextDonationDates(donations: Donation[]) : Date[] {
 
   // TODO Actual computation
 
-  return [
-    latestSang || new Date(),
-    latestPlasma || new Date(),
-    latestPlaquettes || new Date()
-  ];
+  const nextSang = latestSang || new Date()
+  const nextPlasma = latestPlasma || new Date()
+  const nextPlaquettes = latestPlaquettes || new Date()
+
+  return [ nextSang, nextPlasma, nextPlaquettes ]
 }
