@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { onMounted } from 'vue'
   import {ModalDonationForm} from "#components";
   import { computeNextDonationDates } from "~~/services/DonationService";
   import type {Donation} from "~/components/models/Donation";
@@ -9,6 +10,7 @@
 
   const overlay = useOverlay();
   const modal = overlay.create(ModalDonationForm)
+  let computedDates: Date[] = [new Date(), new Date(), new Date()]
 
   function loadDonations() : Donation[] {
     const loaded = JSON.parse(localStorage["donations"] || "[]")
@@ -26,17 +28,7 @@
     return updated
   }
 
-  export default {
-    mounted () {
-      this.loadFromStorage()
-    },
-    methods: {
-      loadFromStorage () {
-        computedDates = computeNextDonationDates(loadDonations())
-      }
-    }
-  }
-  let computedDates: Date[]
+  onMounted(() => computedDates = computeNextDonationDates(loadDonations()))
 
   async function open() {
     const instance = modal.open()
@@ -75,9 +67,9 @@
 <template>
   Vos prochains dons
   <ul>
-<!--    <li>de sang: {{ computedDates[0].toDateString() }}</li>-->
-<!--    <li>de plasma:{{ computedDates[1].toDateString() }} </li>-->
-<!--    <li>de plaquettes: {{ computedDates[2].toDateString() }}</li>-->
+    <li>de sang: {{ computedDates[0].toDateString() }}</li>
+    <li>de plasma:{{ computedDates[1].toDateString() }} </li>
+    <li>de plaquettes: {{ computedDates[2].toDateString() }}</li>
   </ul>
   <UButton label="Encodez un don" color="neutral" variant="subtle" @click="open()" />
 
