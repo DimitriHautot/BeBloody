@@ -4,13 +4,13 @@
   // import type { Donation } from './models/Donation'
 
   const items = ref<RadioGroupItem[]>([
-      {label: 'Sang', value: 'sang'},
-      {label: 'Plasma', value: 'plasma'},
-      {label: 'Plaquettes', value: 'plaquettes'}
+      {label: 'Sang', value: 'BLOOD'},
+      {label: 'Plasma', value: 'PLASMA'},
+      {label: 'Plaquettes', value: 'PLATELETS'}
   ])
-  const donationType = ref<RadioGroupValue>()
+  const donationType = shallowRef<RadioGroupValue>()
   const today = ref<Date>(new Date())
-  const donationDate = ref(new CalendarDate(today.value.getFullYear(), today.value.getMonth() + 1, today.value.getDate()))
+  const donationDate = shallowRef(new CalendarDate(today.value.getFullYear(), today.value.getMonth() + 1, today.value.getDate()))
 
   const emit = defineEmits<{ close: {type: string, date: Date} }>()
 </script>
@@ -34,7 +34,7 @@
           v-model="donationType" value-key="value" variant="card"
           indicator="hidden" :items="items" />
       <br>
-      <UCalendar v-model="donationDate" />
+      <UCalendar v-model="donationDate" :year-controls="false" />
     </template>
 
     <template #footer>
