@@ -14,6 +14,7 @@
 - [x] Vue App: à la réception des données du formulaire, persistence via StorageService
 - [x] Isoler la logique de calcul des dates des prochains dons dans un DonationService
 - [ ] Adapter la logique de calcul aux règles belges (https://www.donneurdesang.be/fr/FAQ/faq-don-de-sang)
+- [ ] Remplacer les types de `Donation` par leurs termes anglais
 - [x] Vue App: après persistence, calcul des dates des prochains dons via DonationService
 - [x] Vue App: mounted: chargement des données via StorageService + calcul des dates des prochains dons via DonationService
 - [x] Vue App: à l’affichage de la modale, lui passer les dates des prochains dons possibles
