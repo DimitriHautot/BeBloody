@@ -3,10 +3,7 @@
   import {ModalDonationForm} from "#components";
   import { computeNextDonationDates } from "~~/services/DonationService";
   import type {Donation} from "~/components/models/Donation";
-
-  // let prochainDonSang = new Date()
-  // let prochainDonPlasma = new Date()
-  // let prochainDonPlaquettes = new Date()
+  import {toDonationType} from "~/components/models/DonationType";
 
   const overlay = useOverlay();
   const modal = overlay.create(ModalDonationForm)
@@ -39,9 +36,6 @@
       console.log("Type du don: " + donation.type);
       console.log("Date du don: " + donation.date);
       const donations: Donation[] = appendAndStore(donation)
-      // const donations = loadDonations()
-      // donations.push(donation)
-      // localStorage["donations"] = JSON.stringify(donations)
 
       // Parse ISO date-time strings into real Date objects
       // for (let loop=0; loop < donations.length; loop++) {
@@ -52,12 +46,6 @@
       const result: Date[] = computeNextDonationDates(donations)
       console.log("Computed: " + result)
       console.log("--------------------------")
-      // console.log(Date.parse(result[0]))
-      // console.log(Date.parse(result[1].date))
-      // console.log(Date.parse(result[2].date))
-      // prochainDonSang = result[0] || new Date()
-      // prochainDonPlasma = result[1] || new Date()
-      // prochainDonPlaquettes = result[2] || new Date()
       computedDates = result
       return result
     }
