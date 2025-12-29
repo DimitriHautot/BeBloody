@@ -1,10 +1,11 @@
 import type {Donation} from "~/components/models/Donation";
 import {DonationType} from "~/components/models/DonationType";
+import {addDays, maxOf} from "~/utils/DateUtils";
 
 const delayInWeeks: number[][] = [[12, 2, 4], [2, 2, 2], [4, 2, 4]];
 
 export function computeNextDonationDates(donations: Donation[]): Date[] {
-  const latestDonation : Donation | undefined = getLatest1(donations, undefined);
+  const latestDonation : Donation | undefined = getLatest1(undefined, donations);
   return [
     computeNextBloodDonationDate(donations, latestDonation),
     computeNextPlasmaDonationDate(donations, latestDonation),
@@ -12,7 +13,7 @@ export function computeNextDonationDates(donations: Donation[]): Date[] {
   ]
 }
 
-function getLatest1(donations: Donation[], type: DonationType | undefined): Donation | undefined {
+export function getLatest1(type: DonationType | undefined, donations: Donation[]): Donation | undefined {
   const latest1 = getLatest(type, donations, 1);
   if (latest1 !== undefined && latest1.length == 1) {
     return latest1[0];
@@ -25,7 +26,8 @@ export function getLatest(type: DonationType | undefined, donations: Donation[],
     donations = donations.filter((donation) => donation.type === type);
   }
   return donations
-    .sort((a, b) => a.date.getTime() - b.date.getTime()).slice(0, count-1) || [];
+    .sort((a, b) => a.date.getTime() - b.date.getTime())
+    .slice(-count);
 }
 
 function computeNextBloodDonationDate(donations: Donation[], latest: Donation | undefined): Date {
@@ -86,25 +88,4 @@ function computeNextPlateletsDonationDate(donations: Donation[], latest: Donatio
   }
 
   return next;
-}
-
-// ---
-// https://www.convex.dev/typescript/ecosystems-integrations/date-time/typescript-date#adding-or-subtracting-days
-
-function maxOf(date1: Date, date2: Date) {
-  if (date1.getTime() < date2.getTime()) {
-    return date2;
-  }
-
-  return date1;
-}
-
-function addWeeks(date: Date, weeks: number): Date {
-  return addDays(date, weeks * 7);
-}
-
-export function addDays(date: Date, days: number): Date {
-  const result = new Date(date);
-  result.setDate(result.getDate() + days);
-  return result;
 }

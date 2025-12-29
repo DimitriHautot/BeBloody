@@ -4,7 +4,7 @@ export class Donation {
   public readonly type: DonationType;
   public readonly date: Date;
 
-  public constructor(type: DonationType | string, date: Date) {
+  public constructor(type: DonationType | string | number, date: Date) {
     if (this.isDonationType(type)) {
       this.type = type;
     } else {
@@ -13,35 +13,36 @@ export class Donation {
     this.date = date;
   }
 
-  private isDonationType(type: DonationType | string): type is DonationType {
-    return type === 'BLOOD' || type === 'PLASMA' || type === 'PLATELETS';
+  private isDonationType(type: DonationType | string | number): type is DonationType {
+    if (typeof type === 'object') {
+      return type === DonationType.BLOOD || type === DonationType.PLASMA || type === DonationType.PLATELETS;
+    }
+    return false;
   }
 
   private toDonationType(value: string | number): DonationType {
-    if (!value) {
-      throw new Error(`Non-empty donation type is not supported`);
-    }
-    if (typeof value === "number") {
-      switch (value) {
-        case 0:
-          return DonationType.BLOOD;
-        case 1:
-          return DonationType.PLASMA;
-        case 2:
-          return DonationType.PLATELETS;
-      }
-    } else {
-      if (value.toLowerCase() === "blood") {
-        return DonationType.BLOOD;
-      }
-      if (value.toLowerCase() === "plasma") {
-        return DonationType.PLASMA;
-      }
-      if (value.toLowerCase() === "platelets") {
-        return DonationType.PLATELETS;
+    if (value != null) {
+      if (typeof value === "number") {
+        switch (value) {
+          case 0:
+            return DonationType.BLOOD;
+          case 1:
+            return DonationType.PLASMA;
+          case 2:
+            return DonationType.PLATELETS;
+        }
+      } else {
+        switch (value.toLowerCase()) {
+          case "blood":
+            return DonationType.BLOOD;
+          case "plasma":
+            return DonationType.PLASMA;
+          case "platelets":
+            return DonationType.PLATELETS;
+        }
       }
     }
 
-    throw new Error(`Donation type ${value} is not supported`);
+    throw new Error(`Donation type (type: ${typeof value}, value: '${value}') is not supported`);
   }
 }
