@@ -1,6 +1,6 @@
 import type {Donation} from "~/components/models/Donation";
 import {DonationType} from "~/components/models/DonationType";
-import {addDays, addWeeks, maxOf} from "~/utils/DateUtils";
+import {addDays, addWeeks, maxOf, subtractDays} from "~/utils/DateUtils";
 
 const delayInWeeks: number[][] = [[12, 2, 4], [2, 2, 2], [4, 2, 4]];
 
@@ -19,6 +19,15 @@ export function getLatest(type: DonationType | undefined, donations: Donation[],
   return donations
     .sort((a, b) => a.date.getTime() - b.date.getTime())
     .slice(-count);
+}
+
+function getAllSince(types: DonationType[] | undefined, donations: Donation[], lowerBoundaryDate: Date): Donation[] {
+  if (types !== undefined) {
+    donations = donations.filter((donation) => types.includes(donation.type));
+  }
+  return donations
+    .sort((a, b) => a.date.getTime() - b.date.getTime())
+    .filter((donation) => donation.date.getTime() >= lowerBoundaryDate.getTime());
 }
 
 export function computeNextDonationDates(donations: Donation[], baseDate?: Date): Date[] {
@@ -79,11 +88,11 @@ function computeNextPlateletsDonationDate(donations: Donation[], latest: Donatio
     next = addWeeks(latest.date, delayInWeeks[DonationType.PLATELETS][latest.type])
 
     // 2) Apply restrictions
-    const latest24: Donation[] = getLatest(DonationType.PLATELETS, donations, 24)
-    // Maximum 24 donations during 365 days
-    if (latest24.length == 24) {
-      if (latest24[0]) {
-        return maxOf(addDays(latest24[0].date, 365), next);
+    const selectionSince365: Donation[] = getAllSince([DonationType.PLATELETS, DonationType.BLOOD], donations, subtractDays(baseDate || new Date(), 365))
+    // Maximum 24 platelets *and* blood donations during 365 days
+    if (selectionSince365.length == 24) {
+      if (selectionSince365[0]) {
+        return maxOf(addDays(selectionSince365[0].date, 365), next);
       }
     }
   }

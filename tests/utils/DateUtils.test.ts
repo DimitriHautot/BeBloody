@@ -1,4 +1,4 @@
-import {addDays, addWeeks, maxOf} from "../../app/utils/DateUtils";
+import {addDays, addWeeks, maxOf, subtractDays} from "../../app/utils/DateUtils";
 
 describe('testing DateUtils', () => {
 
@@ -15,7 +15,7 @@ describe('testing DateUtils', () => {
     expect(result.getDate()).toBe(1);
   })
 
-  test('addDays(..., ...) over end of February should return a valid date, taking into account leap years', () => {
+  test('addDays(..., ...) around end of February should return a valid date, taking into account leap years', () => {
     // Given
     const dateLeapYear: Date = new Date(2024, 1, 27);
     const dateNonLeapYear: Date = new Date(2023, 1, 27);
@@ -34,7 +34,7 @@ describe('testing DateUtils', () => {
     expect(resultNonLeapYear.getDate()).toBe(1);
   })
 
-  test('addWeeks(..., ...) over end of February should return a valid date, taking into account leap years', () => {
+  test('addWeeks(..., ...) around end of February should return a valid date, taking into account leap years', () => {
     // Given
     const dateLeapYear: Date = new Date(2024, 1, 27);
     const dateNonLeapYear: Date = new Date(2023, 1, 27);
@@ -81,5 +81,37 @@ describe('testing DateUtils', () => {
     result = maxOf(date1a, date2);
     // Then 2
     expect(result).toBe(date2)
+  })
+
+  test('subtractDays(2024/01/01, 1) should return a valid date(2023/12/31)', () => {
+    // Given
+    const date: Date = new Date(2024, 0, 1);
+
+    // When
+    const result = subtractDays(date, 1);
+
+    // Then
+    expect(result.getFullYear()).toBe(2023);
+    expect(result.getMonth()).toBe(11);
+    expect(result.getDate()).toBe(31);
+  })
+
+  test('subtractDays(..., ...) around end of February should return a valid date, taking into account leap years', () => {
+    // Given
+    const dateLeapYear: Date = new Date(2024, 2, 1);
+    const dateNonLeapYear: Date = new Date(2023, 2, 1);
+
+    // When
+    const resultLeapYear = subtractDays(dateLeapYear, 2);
+    const resultNonLeapYear = subtractDays(dateNonLeapYear, 2);
+
+    // Then
+    expect(resultLeapYear.getFullYear()).toBe(2024);
+    expect(resultLeapYear.getMonth()).toBe(1);
+    expect(resultLeapYear.getDate()).toBe(28);
+
+    expect(resultNonLeapYear.getFullYear()).toBe(2023);
+    expect(resultNonLeapYear.getMonth()).toBe(1);
+    expect(resultNonLeapYear.getDate()).toBe(27);
   })
 });
