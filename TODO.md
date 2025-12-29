@@ -13,11 +13,12 @@
 - [x] Isoler la persistence dans un StorageService
 - [x] Vue App: à la réception des données du formulaire, persistence via StorageService
 - [x] Isoler la logique de calcul des dates des prochains dons dans un DonationService
-- [ ] Adapter la logique de calcul aux règles belges (https://www.donneurdesang.be/fr/FAQ/faq-don-de-sang)
+- [x] Adapter la logique de calcul aux règles belges (https://www.donneurdesang.be/fr/FAQ/faq-don-de-sang)
 - [ ] Remplacer les types de `Donation` par leurs termes anglais
+- [ ] Revoir la manière dont la modale est affichée, il doit y avoir plus simple
 - [x] Vue App: après persistence, calcul des dates des prochains dons via DonationService
 - [x] Vue App: mounted: chargement des données via StorageService + calcul des dates des prochains dons via DonationService
-- [x] Vue App: à l’affichage de la modale, lui passer les dates des prochains dons possibles
-- [x] Modale: prendre en compte les dates des prochains dons possibles (interdire toute date antérieure, par type de don)
-- [x] Vue App: scrap https://www.donneurdesang.be pour connaître l’état des stocks de sang et de plasma, et les afficher sur la vue principale? A développer
-- [x] Prévoir un mécanisme de préférence, qui permet de sélectionner les types de dons possibles. Par exemple, si quelqu’un ne peut pas donner de plaquettes, en l’indiquant, l’UI cachera ce type de don.
+- [ ] Vue App: à l’affichage de la modale, lui passer les dates des prochains dons possibles
+- [ ] Modale: prendre en compte les dates des prochains dons possibles (interdire toute date antérieure, par type de don)
+- [ ] Vue App: scrap https://www.donneurdesang.be pour connaître l’état des stocks de sang et de plasma, et les afficher sur la vue principale? A développer
+- [ ] Prévoir un mécanisme de préférence, qui permet de sélectionner les types de dons possibles. Par exemple, si quelqu’un ne peut pas donner de plaquettes, en l’indiquant, l’UI cachera ce type de don.
