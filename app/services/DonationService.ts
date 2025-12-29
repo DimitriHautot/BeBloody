@@ -14,13 +14,13 @@ export function computeNextDonationDates(donations: Donation[]): Date[] {
 
 function getLatest1(donations: Donation[], type: DonationType | undefined): Donation | undefined {
   const latest1 = getLatest(type, donations, 1);
-  if (latest1 !== undefined) {
+  if (latest1 !== undefined && latest1.length == 1) {
     return latest1[0];
   }
   return undefined;
 }
 
-function getLatest(type: DonationType | undefined, donations: Donation[], count: number): Donation[] {
+export function getLatest(type: DonationType | undefined, donations: Donation[], count: number): Donation[] {
   if (type !== undefined) {
     donations = donations.filter((donation) => donation.type === type);
   }
@@ -103,7 +103,7 @@ function addWeeks(date: Date, weeks: number): Date {
   return addDays(date, weeks * 7);
 }
 
-function addDays(date: Date, days: number): Date {
+export function addDays(date: Date, days: number): Date {
   const result = new Date(date);
   result.setDate(result.getDate() + days);
   return result;

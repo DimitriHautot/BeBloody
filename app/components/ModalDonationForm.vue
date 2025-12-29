@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import type { RadioGroupItem, RadioGroupValue } from '@nuxt/ui'
   import {CalendarDate, getLocalTimeZone} from "@internationalized/date";
-  // import type { Donation } from './models/Donation'
+  import type {Donation} from "~/components/models/Donation";
 
   const items = ref<RadioGroupItem[]>([
       {label: 'Sang', value: 'BLOOD'},
@@ -12,18 +12,15 @@
   const today = ref<Date>(new Date())
   const donationDate = shallowRef(new CalendarDate(today.value.getFullYear(), today.value.getMonth() + 1, today.value.getDate()))
 
-  const emit = defineEmits<{ close: {type: string, date: Date} }>()
+  const emit = defineEmits<{
+    close: [object | undefined]
+  }>()
 </script>
 
 <template>
   <UModal
       :title="`Encodez un don`"
-      :close="{
-        // onClick: () => emit('close', {null, null}),
-        color: 'primary',
-        variant: 'outline',
-        class: 'rounded-full'
-      }"
+      :close="false"
       :overlay="true"
       :dismissible="false"
       :ui="{ footer: 'justify-end' }"
@@ -39,7 +36,7 @@
 
     <template #footer>
       <UButton
-          label="Annuler" color="neutral" variant="outline" @click="emit('close', {type: null, date: null})" />
+          label="Annuler" color="neutral" variant="outline" @click="emit('close', undefined)" />
       <UButton
           :disabled="!donationType"
           label="OK"

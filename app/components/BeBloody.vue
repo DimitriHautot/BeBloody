@@ -1,9 +1,9 @@
 <script setup lang="ts">
   import { onMounted } from 'vue'
   import {ModalDonationForm} from "#components";
-  import { computeNextDonationDates } from "~~/services/DonationService";
-  import type {Donation} from "~/components/models/Donation";
-  import {toDonationType} from "~/components/models/DonationType";
+  import { computeNextDonationDates } from "~/services/DonationService";
+  import {Donation} from "~/components/models/Donation";
+  // import {toDonationType} from "~/components/models/DonationType";
 
   const overlay = useOverlay();
   const modal = overlay.create(ModalDonationForm)
@@ -30,12 +30,14 @@
   async function open() {
     const instance = modal.open()
 
-    const donation = await instance.result as Donation
-    if (donation && donation.type && donation.date) {
+    const data = await instance.result as object
+    if (data && data.type && data.date) {
       // Store new donation
-      console.log("Type du don: " + donation.type);
-      console.log("Date du don: " + donation.date);
-      const donations: Donation[] = appendAndStore(donation)
+      const type: string = /** @type {string} */ (data.type)
+      const date: Date = /** @type {Date} */ (data.date)
+      console.log("Type du don: " + type);
+      console.log("Date du don: " + date);
+      const donations: Donation[] = appendAndStore(new Donation(type, date))
 
       // Parse ISO date-time strings into real Date objects
       // for (let loop=0; loop < donations.length; loop++) {
