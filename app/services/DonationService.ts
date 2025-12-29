@@ -1,17 +1,8 @@
 import type {Donation} from "~/components/models/Donation";
 import {DonationType} from "~/components/models/DonationType";
-import {addDays, maxOf} from "~/utils/DateUtils";
+import {addDays, addWeeks, maxOf} from "~/utils/DateUtils";
 
 const delayInWeeks: number[][] = [[12, 2, 4], [2, 2, 2], [4, 2, 4]];
-
-export function computeNextDonationDates(donations: Donation[]): Date[] {
-  const latestDonation : Donation | undefined = getLatest1(undefined, donations);
-  return [
-    computeNextBloodDonationDate(donations, latestDonation),
-    computeNextPlasmaDonationDate(donations, latestDonation),
-    computeNextPlateletsDonationDate(donations, latestDonation)
-  ]
-}
 
 export function getLatest1(type: DonationType | undefined, donations: Donation[]): Donation | undefined {
   const latest1 = getLatest(type, donations, 1);
@@ -30,8 +21,18 @@ export function getLatest(type: DonationType | undefined, donations: Donation[],
     .slice(-count);
 }
 
-function computeNextBloodDonationDate(donations: Donation[], latest: Donation | undefined): Date {
-  let next : Date = new Date();
+export function computeNextDonationDates(donations: Donation[], baseDate?: Date): Date[] {
+  const latestDonation : Donation | undefined = getLatest1(undefined, donations);
+  const today = baseDate || new Date();
+  return [
+    computeNextBloodDonationDate(donations, latestDonation, today),
+    computeNextPlasmaDonationDate(donations, latestDonation, today),
+    computeNextPlateletsDonationDate(donations, latestDonation, today)
+  ]
+}
+
+function computeNextBloodDonationDate(donations: Donation[], latest: Donation | undefined, baseDate?: Date): Date {
+  let next : Date = baseDate || new Date();
   if (latest !== undefined) {
     // 1) Compute theoretical date
     // @ts-ignore
@@ -50,8 +51,8 @@ function computeNextBloodDonationDate(donations: Donation[], latest: Donation | 
   return next;
 }
 
-function computeNextPlasmaDonationDate(donations: Donation[], latest: Donation | undefined): Date {
-  let next : Date = new Date();
+function computeNextPlasmaDonationDate(donations: Donation[], latest: Donation | undefined, baseDate?: Date): Date {
+  let next : Date = baseDate || new Date();
   if (latest !== undefined) {
     // 1) Compute theoretical date
     // @ts-ignore
@@ -70,8 +71,8 @@ function computeNextPlasmaDonationDate(donations: Donation[], latest: Donation |
   return next;
 }
 
-function computeNextPlateletsDonationDate(donations: Donation[], latest: Donation | undefined): Date {
-  let next : Date = new Date();
+function computeNextPlateletsDonationDate(donations: Donation[], latest: Donation | undefined, baseDate?: Date): Date {
+  let next : Date = baseDate || new Date();
   if (latest !== undefined) {
     // 1) Compute theoretical date
     // @ts-ignore

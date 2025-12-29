@@ -1,5 +1,5 @@
-import {addDays} from "../../app/utils/DateUtils";
-import {getLatest, getLatest1} from "../../app/services/DonationService";
+import {addDays, addWeeks} from "../../app/utils/DateUtils";
+import {computeNextDonationDates, getLatest, getLatest1} from "../../app/services/DonationService";
 import {Donation} from "../../app/components/models/Donation";
 import {DonationType} from "../../app/components/models/DonationType";
 
@@ -102,5 +102,46 @@ describe('testing DonationService', () => {
 
     // Then
     expect(result).toBe(undefined);
+  })
+
+  test('computeNextDonationDates(Donation[]) should return an array of 3 dates', () => {
+    // Given
+    const blood1: Donation = new Donation(DonationType.BLOOD, new Date(2025, 0, 15)); // January 15th
+    const plasma1: Donation = new Donation(DonationType.PLASMA, addWeeks(blood1.date, 2));  // January 29th
+    const plasma2: Donation = new Donation(DonationType.PLASMA, addWeeks(plasma1.date, 2)); // February 12th
+    const platelets1: Donation = new Donation(DonationType.PLATELETS, addWeeks(plasma2.date, 2)); // February 26th
+    const platelets2: Donation = new Donation(DonationType.PLATELETS, addWeeks(platelets1.date, 4)); // March 26th
+    const blood2: Donation = new Donation(DonationType.BLOOD, addWeeks(blood1.date, 12)); // April 9th
+
+    // If we compute the next donation dates for each type of donation, the day after the latest actual donation event occurred on April 9th
+    const nextBloodDonationDate = new Date(2025, 6, 2, 0, 0, 0, 0)
+    const nextPlasmaDonationDate = new Date(2025, 3, 23, 0, 0, 0, 0)
+    const nextPlateletsDonationDate = new Date(2025, 4, 7, 0, 0, 0, 0)
+
+    // When
+    const result = computeNextDonationDates([blood1, blood2, plasma1, plasma2, platelets1, platelets2], addDays(blood2.date, 1));
+
+    // Then
+    expect(result.length).toBe(3);
+    expect(result[0].getTime()).toBeGreaterThanOrEqual(nextBloodDonationDate.getTime());
+    expect(result[1].getTime()).toBeGreaterThanOrEqual(nextPlasmaDonationDate.getTime());
+    expect(result[2].getTime()).toBeGreaterThanOrEqual(nextPlateletsDonationDate.getTime());
+  })
+
+  test('Blood donation - test restriction: maximum 4 donations per 365 days', () => {
+    // Given
+    const bloodDonation1: Donation = new Donation(DonationType.BLOOD, new Date(2025, 1, 1))
+    // The law seems to say that the minimum is 2 months between 2 donations, which is +/- 9 weeks
+    const bloodDonation2: Donation = new Donation(DonationType.BLOOD, addWeeks(bloodDonation1.date, 9))
+    const bloodDonation3: Donation = new Donation(DonationType.BLOOD, addWeeks(bloodDonation2.date, 9))
+    const bloodDonation4: Donation = new Donation(DonationType.BLOOD, addWeeks(bloodDonation3.date, 9))
+
+    // When
+    const today = addWeeks(bloodDonation4.date, 9);
+    const result = computeNextDonationDates([bloodDonation1, bloodDonation2, bloodDonation3, bloodDonation4], today)
+
+    // Then
+    expect(result.length).toBe(3);
+    expect(result[0].getTime()).toBeGreaterThanOrEqual(addDays(bloodDonation1.date, 365).getTime());
   })
 });
