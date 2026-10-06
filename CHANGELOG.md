@@ -7,6 +7,12 @@ jour de ce fichier.
 
 ## Non publié
 
+- Les feuilles Paramètres, Références et À propos reprennent le même
+  style que la vue principale (fond gris, contenu regroupé dans des
+  cartes blanches arrondies façon réglages iOS), au lieu de chacune avoir
+  son propre style de liste incohérent. Le style de carte groupée est
+  factorisé dans un seul fichier CSS partagé,
+  `src/lib/styles/groupedCard.css` (`20844a3`)
 - Belgique : la saisie d'un don de sang total passé (historique, ou borne
   minimale du sélecteur de date) n'exige plus que le minimum légal de 2
   mois (56 jours) entre deux dons, et non plus la recommandation stricte
