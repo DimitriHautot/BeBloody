@@ -14,6 +14,10 @@
   import { buildInfo } from './lib/buildInfo';
   import { updateAvailable, startUpdateChecks } from './lib/version/updateCheck';
   import { t } from './lib/i18n';
+  // Shared ".card-group"/".card-row" grouped-card list style, global rather
+  // than per-component scoped CSS since it's reused verbatim by
+  // SettingsPanel, ReferencesPanel and AboutPanel — see the file itself.
+  import './lib/styles/groupedCard.css';
 
   // First time the app is opened, show the settings modal right away so the
   // donor can set their country/sex before using the app.

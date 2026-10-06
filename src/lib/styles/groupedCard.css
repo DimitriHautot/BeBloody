@@ -1,0 +1,60 @@
+/* Shared "grouped card" list style: a rounded white card (`.card-group`)
+ * holding a stack of `.card-row` entries separated by hairlines, iOS
+ * Settings-style. Used by every full-page sheet (Paramètres, Références, À
+ * propos) so they all read as the same system as the main view's own white
+ * cards on the page's gray background (see BottomSheet's `page` background
+ * variant, used by Modal).
+ *
+ * Global on purpose, unlike every other component style in this app (which
+ * is scoped CSS in the component's own <style> block): these classes are
+ * shared verbatim across several components, and Svelte's per-component
+ * scoping would otherwise force duplicating this block in each one. Loaded
+ * once from App.svelte. Component-specific styling (e.g. a <select>'s own
+ * look inside a `.card-row`) stays local to that component's scoped CSS.
+ */
+
+.card-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.card-group {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.card-group-title {
+  padding: 0.85rem 1rem 0.35rem;
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+.card-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.85rem 1rem;
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  border-top: 1px solid var(--color-border);
+}
+
+.card-row:first-child,
+.card-group-title + .card-row {
+  border-top: none;
+}
+
+/* A row laid out label-left/value-right (a toggle, a value) instead of the
+ * default label-above-control stack. */
+.card-row-inline {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  color: var(--color-text);
+}

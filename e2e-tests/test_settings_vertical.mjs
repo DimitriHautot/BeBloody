@@ -21,7 +21,7 @@ await page.click('button:has-text("Paramètres")');
 // like they overlap.
 await page.waitForTimeout(350);
 
-const labels = page.locator('.sheet .settings .group:first-child > label');
+const labels = page.locator('.sheet .card-stack .card-group:first-child > label');
 const count = await labels.count();
 assert.equal(count, 4, `expected 4 settings labels in the first group, got ${count}`);
 

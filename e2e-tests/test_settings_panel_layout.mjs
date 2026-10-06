@@ -25,7 +25,7 @@ await page.click('button[aria-label="Menu"]');
 await page.click('button:has-text("Paramètres")');
 await page.waitForTimeout(300);
 
-const groups = page.locator('.sheet .settings > .group');
+const groups = page.locator('.sheet .card-stack > .card-group');
 assert.equal(await groups.count(), 4, 'expected 4 settings groups in the settings panel');
 
 // Each row's own label text is in a text node preceding its <select>/<input>

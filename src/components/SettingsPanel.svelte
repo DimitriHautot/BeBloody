@@ -23,9 +23,9 @@
   }
 </script>
 
-<div class="settings">
-  <div class="group">
-    <label class="row">
+<div class="card-stack">
+  <div class="card-group">
+    <label class="card-row">
       {$t('settings.country')}
       <select bind:value={$donorSettings.countryCode}>
         {#each countries as country}
@@ -34,7 +34,7 @@
       </select>
     </label>
 
-    <label class="row">
+    <label class="card-row">
       {$t('settings.sex')}
       <select bind:value={$donorSettings.sex}>
         <option value="male">{getSexSymbol('male')} {$t('settings.male')}</option>
@@ -42,7 +42,7 @@
       </select>
     </label>
 
-    <label class="row">
+    <label class="card-row">
       {$t('settings.language')}
       <select bind:value={$donorSettings.language}>
         <option value="system">{$t('settings.languageSystem')}</option>
@@ -52,7 +52,7 @@
       </select>
     </label>
 
-    <label class="row">
+    <label class="card-row">
       {$t('settings.theme')}
       <select bind:value={$donorSettings.theme}>
         <option value="system">{$t('settings.themeSystem')}</option>
@@ -62,11 +62,11 @@
     </label>
   </div>
 
-  <div class="group allowed-types">
-    <span class="group-title">{$t('settings.allowedTypes')}</span>
+  <div class="card-group allowed-types">
+    <span class="card-group-title">{$t('settings.allowedTypes')}</span>
     {#each DONATION_TYPES as type}
       {@const checked = $donorSettings.allowedDonationTypes?.[type] ?? true}
-      <label class="row row-inline">
+      <label class="card-row card-row-inline">
         <span>{$t(`donationTypes.${type}`)}</span>
         <input
           type="checkbox"
@@ -78,22 +78,22 @@
     {/each}
   </div>
 
-  <div class="group">
-    <label class="row row-inline">
+  <div class="card-group">
+    <label class="card-row card-row-inline">
       <span>{$t('settings.highlightUpcoming')}</span>
       <input type="checkbox" bind:checked={$donorSettings.highlightUpcoming} />
     </label>
 
     {#if $donorSettings.highlightUpcoming}
-      <label class="row row-inline">
+      <label class="card-row card-row-inline">
         <span>{$t('settings.highlightUpcomingDays')}</span>
         <input type="number" min="1" step="1" class="days" bind:value={$donorSettings.highlightUpcomingDays} />
       </label>
     {/if}
   </div>
 
-  <div class="group">
-    <label class="row row-inline">
+  <div class="card-group">
+    <label class="card-row card-row-inline">
       <span>{$t('settings.debugMode')}</span>
       <input type="checkbox" bind:checked={$donorSettings.debugMode} />
     </label>
@@ -101,44 +101,10 @@
 </div>
 
 <style>
-  .settings {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-  }
-
-  .group {
-    display: flex;
-    flex-direction: column;
-    background: var(--color-surface);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-sm);
-    overflow: hidden;
-  }
-
-  .group-title {
-    padding: 0.85rem 1rem 0.35rem;
-    font-size: 0.85rem;
-    color: var(--color-text-secondary);
-  }
-
-  .row {
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-    padding: 0.85rem 1rem;
-    font-size: 0.9rem;
-    color: var(--color-text-secondary);
-    border-top: 1px solid var(--color-border);
-  }
-
-  .row:first-child {
-    border-top: none;
-  }
-
-  .group-title + .row {
-    border-top: none;
-  }
+  /* The grouped-card look itself (.card-stack/.card-group/.card-row/
+   * .card-row-inline) lives in src/lib/styles/groupedCard.css, shared with
+   * ReferencesPanel and AboutPanel — only field-specific styling stays
+   * here. */
 
   select,
   input[type='number'] {
@@ -154,22 +120,14 @@
     width: 5rem;
   }
 
-  .row-inline {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.6rem;
-    color: var(--color-text);
-  }
-
-  .row-inline input[type='checkbox'] {
+  .card-row-inline input[type='checkbox'] {
     width: 1.2rem;
     height: 1.2rem;
     flex-shrink: 0;
     accent-color: var(--color-primary);
   }
 
-  .row-inline input[type='number'] {
+  .card-row-inline input[type='number'] {
     text-align: right;
   }
 </style>

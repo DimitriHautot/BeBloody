@@ -52,6 +52,7 @@ src/
     rules/         # règles de calcul de la prochaine date éligible, par pays
     settings/      # préférences du donneur (pays, sexe, mode debug) + persistance
     version/       # détection d'une nouvelle version déployée (voir "PWA installée... et cache")
+    styles/        # CSS global partagé entre composants (ex. groupedCard.css, voir plus bas)
     storage.ts      # helper générique `persisted<T>` (store Svelte <-> localStorage)
     dates.ts        # toutes les fonctions utilitaires de manipulation de dates (voir plus bas)
   components/       # AppMenu, Modal, DonationForm, DonationList, NextDonationSummary, SettingsPanel
@@ -59,6 +60,23 @@ src/
   App.svelte
   main.ts
 ```
+
+## Style "carte groupée" (`.card-group`/`.card-row`)
+
+Les feuilles de contenu pleine page (Paramètres, Références, À propos,
+ouvertes via `Modal.svelte`) reprennent le même système visuel que la vue
+principale : fond gris (`BottomSheet` avec `background="page"`, utilisé
+par `Modal`) et contenu regroupé dans des cartes blanches arrondies. Ces
+classes (`.card-stack`, `.card-group`, `.card-group-title`, `.card-row`,
+`.card-row-inline`) vivent dans `src/lib/styles/groupedCard.css`, chargé
+une seule fois depuis `App.svelte` — contrairement au reste de l'app (CSS
+scoping par composant), car elles sont réutilisées telles quelles par
+plusieurs composants. Un nouveau champ/section dans une de ces feuilles
+doit réutiliser ces classes plutôt que redéfinir un style de carte
+localement ; seul le style propre au contenu (un `<select>`, un lien...)
+reste dans le `<style>` scopé du composant. Le menu d'action (`AppMenu`,
+ouvert via `BottomSheet` directement, sans `Modal`) n'est pas concerné et
+garde son fond blanc de feuille d'action iOS.
 
 ## Utilitaires de dates (`src/lib/dates.ts`)
 
