@@ -15,11 +15,15 @@ await page.reload();
 await page.waitForTimeout(400);
 await page.click('button[aria-label="Menu"]');
 await page.click('button:has-text("Paramètres")');
-await page.waitForTimeout(150);
+// Wait out the sheet's slide-up animation (0.2s) before measuring: reading
+// boundingBox() mid-transform, across several sequential calls, can catch
+// each row at a slightly different offset and make still-static rows look
+// like they overlap.
+await page.waitForTimeout(350);
 
-const labels = page.locator('.sheet section > label');
+const labels = page.locator('.sheet .settings .group:first-child > label');
 const count = await labels.count();
-assert.equal(count, 5, `expected 5 settings labels, got ${count}`);
+assert.equal(count, 4, `expected 4 settings labels in the first group, got ${count}`);
 
 const boxes = [];
 for (let i = 0; i < count; i++) {

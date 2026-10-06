@@ -1,8 +1,9 @@
 // Requires a dev server already running at http://127.0.0.1:$PORT (defaults
 // to 5176; run via e2e-tests/run.sh, or set the PORT env var yourself).
 //
-// SettingsPanel layout: an <hr> after the "Thème" field, and another at the
-// end of the panel with "Mode debug" placed after it (last field).
+// SettingsPanel layout: fields are grouped into white "card" sections (iOS
+// Settings style, aligned with the main view's gray page / white cards
+// look), with "Mode debug" as its own group at the end of the panel.
 import assert from 'node:assert/strict';
 import { chromium } from 'playwright';
 
@@ -22,19 +23,25 @@ await page.waitForTimeout(300);
 
 await page.click('button[aria-label="Menu"]');
 await page.click('button:has-text("Paramètres")');
-await page.waitForTimeout(150);
+await page.waitForTimeout(300);
 
-assert.equal(await page.locator('.sheet section hr').count(), 2, 'expected 2 horizontal separators in the settings panel');
+const groups = page.locator('.sheet .settings > .group');
+assert.equal(await groups.count(), 4, 'expected 4 settings groups in the settings panel');
 
-const fieldOrder = await page.locator('.sheet section > *').evaluateAll((nodes) =>
-  nodes.map((n) => (n.tagName === 'HR' ? 'HR' : n.textContent?.trim().slice(0, 30)))
+// Each row's own label text is in a text node preceding its <select>/<input>
+// — read that instead of the row's full textContent, which for a <select>
+// also includes every (non-selected) <option>'s text.
+const firstGroupFields = await groups.nth(0).locator('> label').evaluateAll((rows) =>
+  rows.map((row) => row.firstChild?.textContent?.trim() ?? '')
+);
+assert.deepEqual(
+  firstGroupFields,
+  ['Pays (règles applicables)', 'Sexe', 'Langue', 'Thème'],
+  'expected the first group to hold, in order, the country/sex/language/theme fields'
 );
 
-assert.equal(fieldOrder[fieldOrder.length - 1], 'Mode debug', 'expected "Mode debug" to be the last field in the panel');
-assert.equal(fieldOrder[fieldOrder.length - 2], 'HR', 'expected the last separator to sit right before "Mode debug"');
-
-const themeIndex = fieldOrder.findIndex((label) => label?.startsWith('Thème'));
-assert.equal(fieldOrder[themeIndex + 1], 'HR', 'expected a separator right after the "Thème" field');
+const lastGroupText = await groups.nth(3).evaluate((el) => el.textContent?.trim());
+assert.ok(lastGroupText?.startsWith('Mode debug'), 'expected "Mode debug" to be its own, last group in the panel');
 
 await browser.close();
-console.log('OK: SettingsPanel has the expected separators, with "Mode debug" moved to the end.');
+console.log('OK: SettingsPanel is split into grouped cards, with "Mode debug" moved to its own group at the end.');
