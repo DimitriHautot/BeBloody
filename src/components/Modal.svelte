@@ -12,7 +12,7 @@
   }
 </script>
 
-<BottomSheet ariaLabelledby="modal-title" on:close={close} let:close>
+<BottomSheet ariaLabelledby="modal-title" background="page" on:close={close} let:close>
   <div class="header">
     <h2 id="modal-title">{title}</h2>
     <button class="close" on:click={close} aria-label={$t('modal.close')}>✕</button>
@@ -51,13 +51,14 @@
     justify-content: center;
     width: 2rem;
     height: 2rem;
-    background: var(--color-bg);
+    background: var(--color-surface);
     border: none;
     border-radius: 50%;
     cursor: pointer;
     font-size: 1rem;
     color: var(--color-text-secondary);
     line-height: 1;
+    box-shadow: var(--shadow-sm);
   }
 
   .close:hover {

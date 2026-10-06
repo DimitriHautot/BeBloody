@@ -26,12 +26,12 @@
   <b>{$t('about.disclaimerBold')}</b>
 </p>
 
-<dl>
-  <div class="row">
+<dl class="card-group">
+  <div class="card-row">
     <dt>{$t('about.contact')}</dt>
     <dd><a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></dd>
   </div>
-  <div class="row">
+  <div class="card-row">
     <dt>{$t('about.sourceCode')}</dt>
     <dd>
       <a href={SOURCE_URL} target="_blank" rel="noopener noreferrer">{SOURCE_URL}</a>
@@ -45,27 +45,23 @@
 </p>
 
 <style>
+  /* The grouped-card look itself (.card-group/.card-row) lives in
+   * src/lib/styles/groupedCard.css, shared with SettingsPanel and
+   * ReferencesPanel — only content-specific styling stays here. */
+
   .intro {
     color: var(--color-text-secondary);
     margin-top: 0;
+    margin-bottom: 1.25rem;
   }
 
   dl {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    margin: 1.25rem 0 0;
-  }
-
-  .row {
-    display: flex;
-    flex-direction: column;
-    gap: 0.15rem;
+    margin: 0;
   }
 
   dt {
+    margin: 0;
     font-size: 0.85rem;
-    color: var(--color-text-secondary);
   }
 
   dd {

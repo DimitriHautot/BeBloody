@@ -27,6 +27,11 @@
    * menu), `ariaLabelledby` pointing at a heading id otherwise (Modal). */
   export let ariaLabel: string | null = null;
   export let ariaLabelledby: string | null = null;
+  /** 'surface' (default) is the white action-sheet look used by AppMenu.
+   * 'page' is the gray page background used by Modal, so a sheet holding a
+   * full settings/content page reads as a continuation of the main view
+   * (gray page, white grouped cards) instead of the inverse. */
+  export let background: 'surface' | 'page' = 'surface';
 
   const dispatch = createEventDispatcher<{ close: void }>();
 
@@ -104,6 +109,7 @@
   <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div
     class="sheet"
+    class:page={background === 'page'}
     role="dialog"
     aria-modal="true"
     aria-label={ariaLabel}
@@ -149,6 +155,10 @@
     display: flex;
     flex-direction: column;
     animation: slide-up 0.2s ease-out;
+  }
+
+  .sheet.page {
+    background: var(--color-bg);
   }
 
   .grabber {

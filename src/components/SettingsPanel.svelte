@@ -23,148 +23,111 @@
   }
 </script>
 
-<section>
-  <label>
-    {$t('settings.country')}
-    <select bind:value={$donorSettings.countryCode}>
-      {#each countries as country}
-        <option value={country.countryCode}>{getFlag(country.countryCode)} {country.countryName}</option>
-      {/each}
-    </select>
-  </label>
+<div class="card-stack">
+  <div class="card-group">
+    <label class="card-row">
+      {$t('settings.country')}
+      <select bind:value={$donorSettings.countryCode}>
+        {#each countries as country}
+          <option value={country.countryCode}>{getFlag(country.countryCode)} {country.countryName}</option>
+        {/each}
+      </select>
+    </label>
 
-  <label>
-    {$t('settings.sex')}
-    <select bind:value={$donorSettings.sex}>
-      <option value="male">{getSexSymbol('male')} {$t('settings.male')}</option>
-      <option value="female">{getSexSymbol('female')} {$t('settings.female')}</option>
-    </select>
-  </label>
+    <label class="card-row">
+      {$t('settings.sex')}
+      <select bind:value={$donorSettings.sex}>
+        <option value="male">{getSexSymbol('male')} {$t('settings.male')}</option>
+        <option value="female">{getSexSymbol('female')} {$t('settings.female')}</option>
+      </select>
+    </label>
 
-  <label>
-    {$t('settings.language')}
-    <select bind:value={$donorSettings.language}>
-      <option value="system">{$t('settings.languageSystem')}</option>
-      {#each AVAILABLE_LOCALES as availableLocale}
-        <option value={availableLocale}>{LOCALE_FLAGS[availableLocale]} {LOCALE_LABELS[availableLocale]}</option>
-      {/each}
-    </select>
-  </label>
+    <label class="card-row">
+      {$t('settings.language')}
+      <select bind:value={$donorSettings.language}>
+        <option value="system">{$t('settings.languageSystem')}</option>
+        {#each AVAILABLE_LOCALES as availableLocale}
+          <option value={availableLocale}>{LOCALE_FLAGS[availableLocale]} {LOCALE_LABELS[availableLocale]}</option>
+        {/each}
+      </select>
+    </label>
 
-  <label>
-    {$t('settings.theme')}
-    <select bind:value={$donorSettings.theme}>
-      <option value="system">{$t('settings.themeSystem')}</option>
-      <option value="light">{$t('settings.themeLight')}</option>
-      <option value="dark">{$t('settings.themeDark')}</option>
-    </select>
-  </label>
+    <label class="card-row">
+      {$t('settings.theme')}
+      <select bind:value={$donorSettings.theme}>
+        <option value="system">{$t('settings.themeSystem')}</option>
+        <option value="light">{$t('settings.themeLight')}</option>
+        <option value="dark">{$t('settings.themeDark')}</option>
+      </select>
+    </label>
+  </div>
 
-  <hr />
-
-  <div class="allowed-types">
-    <span class="allowed-types-legend">{$t('settings.allowedTypes')}</span>
+  <div class="card-group allowed-types">
+    <span class="card-group-title">{$t('settings.allowedTypes')}</span>
     {#each DONATION_TYPES as type}
       {@const checked = $donorSettings.allowedDonationTypes?.[type] ?? true}
-      <label class="checkbox">
+      <label class="card-row card-row-inline">
+        <span>{$t(`donationTypes.${type}`)}</span>
         <input
           type="checkbox"
           {checked}
           disabled={checked && allowedCount <= 1}
           on:change={(event) => toggleAllowedType(type, event.currentTarget.checked)}
         />
-        {$t(`donationTypes.${type}`)}
       </label>
     {/each}
   </div>
 
-  <div class="highlight-upcoming">
-    <label class="checkbox">
+  <div class="card-group">
+    <label class="card-row card-row-inline">
+      <span>{$t('settings.highlightUpcoming')}</span>
       <input type="checkbox" bind:checked={$donorSettings.highlightUpcoming} />
-      {$t('settings.highlightUpcoming')}
     </label>
 
     {#if $donorSettings.highlightUpcoming}
-      <label>
-        {$t('settings.highlightUpcomingDays')}
-        <input type="number" min="1" step="1" bind:value={$donorSettings.highlightUpcomingDays} />
+      <label class="card-row card-row-inline">
+        <span>{$t('settings.highlightUpcomingDays')}</span>
+        <input type="number" min="1" step="1" class="days" bind:value={$donorSettings.highlightUpcomingDays} />
       </label>
     {/if}
   </div>
 
-  <hr />
-
-  <label class="checkbox">
-    <input type="checkbox" bind:checked={$donorSettings.debugMode} />
-    {$t('settings.debugMode')}
-  </label>
-</section>
+  <div class="card-group">
+    <label class="card-row card-row-inline">
+      <span>{$t('settings.debugMode')}</span>
+      <input type="checkbox" bind:checked={$donorSettings.debugMode} />
+    </label>
+  </div>
+</div>
 
 <style>
-  section {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-  }
-
-  label {
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-    font-size: 0.9rem;
-    color: var(--color-text-secondary);
-  }
+  /* The grouped-card look itself (.card-stack/.card-group/.card-row/
+   * .card-row-inline) lives in src/lib/styles/groupedCard.css, shared with
+   * ReferencesPanel and AboutPanel — only field-specific styling stays
+   * here. */
 
   select,
   input[type='number'] {
-    padding: 0.65rem 0.75rem;
+    padding: 0;
     font-size: 1rem;
     color: var(--color-text);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-sm);
-    background: var(--color-bg);
+    border: none;
+    border-radius: 0;
+    background: transparent;
   }
 
-  input[type='number'] {
+  .days {
     width: 5rem;
   }
 
-  .checkbox {
-    flex-direction: row;
-    align-items: center;
-    gap: 0.6rem;
-    color: var(--color-text);
-  }
-
-  .checkbox input[type='checkbox'] {
+  .card-row-inline input[type='checkbox'] {
     width: 1.2rem;
     height: 1.2rem;
+    flex-shrink: 0;
     accent-color: var(--color-primary);
   }
 
-  .highlight-upcoming {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--color-border);
-  }
-
-  .allowed-types {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .allowed-types-legend {
-    font-size: 0.9rem;
-    color: var(--color-text-secondary);
-  }
-
-  hr {
-    width: 100%;
-    border: none;
-    border-top: 1px solid var(--color-border);
-    margin: 0;
+  .card-row-inline input[type='number'] {
+    text-align: right;
   }
 </style>
