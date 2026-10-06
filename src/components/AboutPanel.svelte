@@ -4,7 +4,7 @@
   import { t } from '../lib/i18n';
 
   const CONTACT_EMAIL = 'bebloody@hautot.be';
-  const SOURCE_URL = 'https://github.com/DimitriHautot/BeBloodyClaude';
+  const SOURCE_URL = 'https://github.com/DimitriHautot/BeBloody';
 
   const dispatch = createEventDispatcher<{ 'open-references': void }>();
 </script>
