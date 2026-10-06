@@ -7,6 +7,8 @@ jour de ce fichier.
 
 ## Non publié
 
+- Le lien vers le [code source](https://github.com/DimitriHautot/BeBloody)
+  a été adapté au nouveau nom du repository (`ae1a19c`)
 - Les feuilles Paramètres, Références et À propos reprennent le même
   style que la vue principale (fond gris, contenu regroupé dans des
   cartes blanches arrondies façon réglages iOS), au lieu de chacune avoir
