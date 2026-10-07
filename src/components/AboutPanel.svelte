@@ -1,12 +1,22 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
+  import { createEventDispatcher, onMount } from 'svelte';
   import { buildInfo } from '../lib/buildInfo';
   import { t } from '../lib/i18n';
 
-  const CONTACT_EMAIL = 'bebloody@hautot.be';
+  const CONTACT_EMAIL = 'YmVibG9vZHlAaGF1dG90LmJl';
   const SOURCE_URL = 'https://github.com/DimitriHautot/BeBloody';
 
   const dispatch = createEventDispatcher<{ 'open-references': void }>();
+
+  let contactEmail = '';
+
+  function decodeEmail(obfuscated: string): string {
+    return atob(obfuscated);
+  }
+
+  onMount(() => {
+    contactEmail = decodeEmail(CONTACT_EMAIL);
+  });
 </script>
 
 <p class="intro">
@@ -29,7 +39,11 @@
 <dl class="card-group">
   <div class="card-row">
     <dt>{$t('about.contact')}</dt>
-    <dd><a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></dd>
+    <dd>
+      {#if contactEmail}
+        <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
+      {/if}
+    </dd>
   </div>
   <div class="card-row">
     <dt>{$t('about.sourceCode')}</dt>
