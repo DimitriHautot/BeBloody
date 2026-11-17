@@ -105,15 +105,16 @@ une version en cache après un déploiement. iOS en particulier a tendance à
 garder longtemps la version HTML/JS/CSS déjà chargée pour une PWA
 standalone tant qu'elle n'est pas explicitement invalidée.
 
-**Recommandation** : côté hébergement du build statique (`dist/`),
-vérifier que les en-têtes `Cache-Control` sont adaptés à ce mode d'usage —
-typiquement pas de cache long (`no-cache` ou une durée courte) sur
+**En-têtes `Cache-Control`** : définis dans `public/.htaccess` (copié dans
+`dist/` par Vite, voir « Mozilla Observatory » plus bas) — pas de cache long
+(`no-cache`) sur
 `index.html`, sur `manifest.webmanifest` et sur `version.json`, puisque ce
 sont eux qui référencent (ou décrivent) le build courant, contrairement
 aux assets hashés (`assets/index-*.js/css`, qui eux peuvent être mis en
 cache long terme sans risque grâce au hash dans leur nom). Sans ça, un
 utilisateur ayant déjà installé l'app peut rester bloqué sur une ancienne
-version après un déploiement.
+version après un déploiement. `theme-init.js` est aussi en `no-cache`
+(nom non hashé).
 
 **Détection automatique d'une nouvelle version** : en complément (pas en
 remplacement) de ces en-têtes, l'app interroge périodiquement
@@ -127,6 +128,47 @@ manuel — jamais automatique, pour ne pas interrompre une saisie en cours
 dans `DonationForm`. Pas de service worker : plus simple à faire fiable
 qu'une stratégie de cache/`skipWaiting`, et l'app n'a pas besoin de
 fonctionner hors-ligne.
+
+## Mozilla Observatory
+
+Objectif : garder la note la plus haute possible sur
+https://developer.mozilla.org/en-US/observatory. Les en-têtes de sécurité
+(et de cache) sont définis dans `public/.htaccess`, que Vite copie tel quel
+dans `dist/`. L'Observatory note chaque sous-domaine séparément : ce
+fichier ne vaut que pour bebloody.hautot.be.
+
+Règles :
+
+- **Aucun JavaScript inline** : pas de `<script>` sans `src` dans
+  `index.html`, pas d'attribut `on…`, pas d'URL `javascript:`, pas de
+  `eval`/`new Function`/`setTimeout("chaîne")`. La CSP
+  (`script-src 'self'`) les bloquerait. Un script qui doit tourner avant
+  l'app (comme `public/theme-init.js`, qui applique le thème avant le
+  premier rendu) va dans `public/` et se charge avec un
+  `<script src="/…">` classique, non `type="module"`, pour rester bloquant.
+- Les constantes dupliquées entre `public/theme-init.js` et l'app (clé
+  `donorSettings`, couleurs `--color-primary`/`--color-primary-night`)
+  restent synchronisées à la main, comme avant.
+- **Aucune ressource externe** : pas de CDN, Google Fonts, analytics ni API
+  tierce. `connect-src 'self'` ne permet que `fetch('/version.json')` et
+  autres requêtes vers le site lui-même. Les liens `<a href>` vers d'autres
+  sites (sources des règles de don, etc.) ne sont pas concernés.
+- Les styles inline sont tolérés (`style-src 'unsafe-inline'`, non pénalisé ;
+  Svelte en injecte pour les transitions).
+- Ajout d'un service worker, d'un Web Worker, d'images `blob:` (export,
+  partage) ou d'une API externe : ajouter la source à la **seule** directive
+  concernée (`worker-src`, `img-src`, `connect-src`…), jamais à
+  `default-src`, et ne jamais ajouter `'unsafe-inline'`/`'unsafe-eval'` à
+  `script-src`.
+- Conserver : HSTS `max-age` ≥ 6 mois avec `includeSubDomains`, `nosniff`,
+  `frame-ancestors 'none'` + `X-Frame-Options: DENY`, `Referrer-Policy`,
+  `Permissions-Policy`, et le blocage des fichiers cachés (sauf
+  `/.well-known/`).
+
+Vérifier : après `npm run build`, `dist/index.html` ne doit contenir aucun
+`<script>` sans `src` ; servir `dist/` avec la CSP de `public/.htaccess` et
+vérifier l'absence de violation CSP dans la console. Après déploiement :
+`curl -sI https://bebloody.hautot.be/`, puis relancer l'Observatory.
 
 ## Taille de police : suivre les réglages du téléphone
 
