@@ -7,6 +7,9 @@ jour de ce fichier.
 
 ## Non publié
 
+- Le texte du pied de page (version, build) est plus lisible : il n'est
+  plus pâli par une opacité, et atteint désormais le contraste minimal
+  recommandé (WCAG AA) en thème clair comme en sombre (`06c3a0d`)
 - Le script `theme-init.js` est de nouveau chargé : sa balise `<script>`
   avait été cassée, si bien que le thème Clair/Sombre choisi dans les
   Paramètres ne s'appliquait plus avant le premier affichage (`b1d92da`)
