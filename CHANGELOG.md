@@ -7,6 +7,9 @@ jour de ce fichier.
 
 ## Non publié
 
+- Référencement : titre de page plus descriptif, URL canonique, balises
+  Open Graph pour l'aperçu des liens partagés, texte `<noscript>`
+  décrivant l'app, et ajout de `robots.txt` et `sitemap.xml` (`4cc2412`)
 - Le lien vers le [code source](https://github.com/DimitriHautot/BeBloody)
   a été adapté au nouveau nom du repository (`ae1a19c`)
 - Les feuilles Paramètres, Références et À propos reprennent le même
