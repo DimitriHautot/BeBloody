@@ -282,6 +282,5 @@
     font-size: 0.75rem;
     color: var(--color-text-secondary);
     text-align: center;
-    opacity: 0.7;
   }
 </style>
