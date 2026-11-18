@@ -26,8 +26,24 @@
     <script src="/
 	"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <title>BeBloody</title>
+    <title>BeBloody – Prochaine date de don de sang, plasma et plaquettes</title>
     <meta name="description" content="Suivi des dons de sang total, plasma et plaquettes, avec calcul de la prochaine date de don possible." />
+    <link rel="canonical" href="https://bebloody.hautot.be/" />
+
+    <!-- Link previews (WhatsApp, Messenger, Slack...). og:image must be an
+         absolute URL; reuses the 512px app icon, square, hence the
+         "summary" (not "summary_large_image") Twitter card. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="BeBloody" />
+    <meta property="og:title" content="BeBloody – Prochaine date de don de sang, plasma et plaquettes" />
+    <meta property="og:description" content="Suivi des dons de sang total, plasma et plaquettes, avec calcul de la prochaine date de don possible." />
+    <meta property="og:url" content="https://bebloody.hautot.be/" />
+    <meta property="og:image" content="https://bebloody.hautot.be/icons/icon-512.png" />
+    <meta property="og:image:width" content="512" />
+    <meta property="og:image:height" content="512" />
+    <meta property="og:image:alt" content="Logo BeBloody" />
+    <meta property="og:locale" content="fr_BE" />
+    <meta name="twitter:card" content="summary" />
 
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="icon" type="image/png" href="/favicon.png" sizes="192x192" />
@@ -95,6 +111,18 @@
   </head>
   <body>
     <div id="app"></div>
+    <!-- Static text for crawlers/visitors that don't run JavaScript: the
+         whole UI is rendered by Svelte inside #app. -->
+    <noscript>
+      <h1>BeBloody</h1>
+      <p>
+        BeBloody vous aide à suivre vos dons de sang total, de plasma et de
+        plaquettes, et calcule la prochaine date à laquelle vous pourrez
+        donner à nouveau, selon les règles de votre pays (Belgique, France).
+        Vos données restent dans votre navigateur, sans compte ni serveur.
+      </p>
+      <p>Activez JavaScript pour utiliser l'application.</p>
+    </noscript>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
