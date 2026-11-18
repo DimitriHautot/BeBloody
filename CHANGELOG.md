@@ -7,6 +7,9 @@ jour de ce fichier.
 
 ## Non publié
 
+- Le script `theme-init.js` est de nouveau chargé : sa balise `<script>`
+  avait été cassée, si bien que le thème Clair/Sombre choisi dans les
+  Paramètres ne s'appliquait plus avant le premier affichage (`b1d92da`)
 - Référencement : titre de page plus descriptif, URL canonique, balises
   Open Graph pour l'aperçu des liens partagés, texte `<noscript>`
   décrivant l'app, et ajout de `robots.txt` et `sitemap.xml` (`4cc2412`)
